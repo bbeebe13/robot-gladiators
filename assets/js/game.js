@@ -12,29 +12,44 @@ var randomNumber = function(min,max) {
     return value;
 }
 
+var fightOrSkip = function() {
+   //Prompt players to fight or skip battle
+   var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    
+   // if the `promptFight` is NOT a valid value, then execute the following statements.
+   if (!promptFight) {
+       window.alert("You need to provide a valid answer! Please try again.");
+       return fightOrSkip();
+   }
+
+   promptFight = promptFight.toLowerCase();
+   console.log(promptFight);
+   if (promptFight === "skip") {
+    // if player picks "skip" confirm and then stop the loop
+    var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        //if yes (true), leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            //subtract money from playerInfo.money for skipping
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+            return true;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+
 var fight = function(enemy) {
     //repeat and execute as long as enemy robot is alive
     while(playerInfo.health >0 && enemy.health > 0) {
 
-        //Prompt players to fight or skip battle
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+        if (fightOrSkip()) {
+            break;
+        };
         
-        
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            // if player picks "skip" confirm and then stop the loop
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-            //if yes (true), leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-                //subtract money from playerInfo.money for skipping
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money);
-                break;
-            }
-        }
-
-
         //Subtract the value of `playerInfo.attack` from the value of `enemy.health` and use that result to update the value in the `enemy.health` variable
         var damage = randomNumber(playerInfo.attack-3, playerInfo.attack);
         
